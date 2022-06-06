@@ -1,12 +1,14 @@
-FROM jenkins
+FROM jenkins/jenkins
 USER root
 
 RUN mkdir -p /tmp/download && \
-  curl -L https://download.docker.com/linux/static/stable/x86_64/docker-20.10.9.tgz | tar -xz /tmp/download && \
-  rem -rf /tmp/download/docker/dockerd && \
+  export DEBIAN_FRONTEND=noninteractive && \
+  curl -L https://download.docker.com/linux/static/stable/x86_64/docker-20.10.9.tgz | tar -xz -C /tmp/download && \
+  rm -rf /tmp/download/docker/dockerd && \
   mv /tmp/download/docker/docker* /usr/local/bin/ && \
   rm -rf /tmp/download && \
-  groupadd -g 992 docker &&
+  #apt-get update && apt-get -yq install liblinux-usermod && \
+  groupadd -g 992 docker && \
   usermod -aG docker jenkins
 
 
